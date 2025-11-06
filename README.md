@@ -170,8 +170,17 @@ pre-commit install
 ### Running Tests
 
 ```bash
-# Run unit tests
+# Run all tests (unit tests + robot tests via pytest wrapper)
 pytest tests/
+
+# Run unit tests only
+pytest tests/test_unit.py
+
+# Run robot acceptance tests directly
+robot tests/acceptance.robot
+
+# Run acceptance tests via pytest wrapper
+pytest tests/test_acceptance.py
 
 # Run with coverage
 pytest --cov=JMESPathLibrary tests/
