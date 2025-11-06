@@ -174,12 +174,12 @@ pre-commit install
 pytest tests/
 
 # Run with coverage
-pytest --cov=JMESPath tests/
+pytest --cov=JMESPathLibrary tests/
 
 # Run linters
 ruff check .
 mypy .
-bandit -r JMESPath/
+bandit -r JMESPathLibrary/
 ```
 
 ### Code Quality
