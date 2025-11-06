@@ -5,9 +5,11 @@ This module contains the keyword methods that provide JSON querying functionalit
 using JMESPath expressions.
 """
 
-import jmespath
 from typing import Any
+
 from robot.api.deco import keyword
+
+import jmespath
 
 
 class JMESPathKeywords:

@@ -10,5 +10,5 @@ repos:
     rev: v1.17.1
     hooks:
       - id: mypy
-        additional_dependencies: [jmespath, types-requests]
+        additional_dependencies: [jmespath, pytest, types-requests, robotframework]
         args: [--strict, --ignore-missing-imports]
