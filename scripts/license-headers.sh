@@ -10,7 +10,7 @@ set -e
 
 # Configuration
 EXPECTED_SPDX="# SPDX-License-Identifier: MPL-2.0"
-EXPECTED_COPYRIGHT="# Copyright (c) 2025 Daniel Schmidt"
+EXPECTED_COPYRIGHT="# Copyright (c) 2025 Oliver Boehmer"
 
 # Colors for output
 RED='\033[0;31m'

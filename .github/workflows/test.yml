@@ -51,6 +51,9 @@ jobs:
       - name: Pre-commit Checks
         uses: pre-commit/action@v3.0.1
 
+      - name: Check License Headers
+        run: bash scripts/license-headers.sh
+
   test:
     name: Tests
     runs-on: ubuntu-latest

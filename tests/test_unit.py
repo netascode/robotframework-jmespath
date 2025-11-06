@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MPL-2.0
+# Copyright (c) 2025 Oliver Boehmer
+
+
 """Unit tests for JMESPath library."""
 
 import pytest
