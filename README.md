@@ -26,22 +26,22 @@ pip install robotframework-jmespath
 
 ```robot
 *** Settings ***
-Library    JMESPath
+Library    JMESPathLibrary
 
 *** Test Cases ***
 Query JSON Data
     ${json}=    Set Variable    {"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]}
-    ${name}=    Json Search String    ${json}    users[0].name
+    ${name}=    JSON Search String    ${json}    users[0].name
     Should Be Equal    ${name}    Alice
 
-    ${names}=    Json Search List    ${json}    users[*].name
+    ${names}=    JSON Search List    ${json}    users[*].name
     Should Contain    ${names}    Alice
     Should Contain    ${names}    Bob
 ```
 
 ## Keywords
 
-### Json Search String
+### JSON Search String
 
 Execute a JMESPath query and return a single string result.
 
@@ -53,11 +53,11 @@ Execute a JMESPath query and return a single string result.
 
 **Examples:**
 ```robot
-${tenant}=    Json Search String    ${response}    imdata[0].fvTenant.attributes.name
-${ip}=        Json Search String    ${response}    imdata[0].fvBD.children[?fvSubnet] | [0].fvSubnet.attributes.ip
+${tenant}=    JSON Search String    ${response}    imdata[0].fvTenant.attributes.name
+${ip}=        JSON Search String    ${response}    imdata[0].fvBD.children[?fvSubnet] | [0].fvSubnet.attributes.ip
 ```
 
-### Json Search List
+### JSON Search List
 
 Execute a JMESPath query and return results as a list.
 
@@ -69,8 +69,8 @@ Execute a JMESPath query and return results as a list.
 
 **Examples:**
 ```robot
-${names}=    Json Search List    ${response}    imdata[0].fvTenant.children[*].fvAp.attributes.name
-${ips}=      Json Search List    ${response}    imdata[0].fvBD.children[*].fvSubnet.attributes.ip
+${names}=    JSON Search List    ${response}    imdata[0].fvTenant.children[*].fvAp.attributes.name
+${ips}=      JSON Search List    ${response}    imdata[0].fvBD.children[*].fvSubnet.attributes.ip
 ```
 
 ## JMESPath Syntax Overview
@@ -128,7 +128,7 @@ users[?age > `25` && active == `true`]
 ```robot
 *** Settings ***
 Library    RequestsLibrary
-Library    JMESPath
+Library    JMESPathLibrary
 
 *** Test Cases ***
 Verify Tenant Configuration
@@ -137,16 +137,16 @@ Verify Tenant Configuration
     ${json}=        Set Variable    ${response.json()}
 
     # Query with JMESPath
-    ${tenant_name}=    Json Search String    ${json}    imdata[0].fvTenant.attributes.name
+    ${tenant_name}=    JSON Search String    ${json}    imdata[0].fvTenant.attributes.name
     Should Be Equal    ${tenant_name}    TENANT1
 
     # Query nested objects
-    ${ap_name}=    Json Search String    ${json}
+    ${ap_name}=    JSON Search String    ${json}
     ...    imdata[0].fvTenant.children[?fvAp.attributes.name=='AP1'] | [0].fvAp.attributes.name
     Should Be Equal    ${ap_name}    AP1
 
     # Get all subnet IPs
-    ${subnets}=    Json Search List    ${json}
+    ${subnets}=    JSON Search List    ${json}
     ...    imdata[0].fvTenant.children[*].fvBD.children[*].fvSubnet.attributes.ip
     Should Contain    ${subnets}    10.0.0.1/24
 ```

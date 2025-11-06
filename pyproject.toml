@@ -51,7 +51,7 @@ dev = [
 ]
 
 [tool.coverage.run]
-source = ["JMESPath"]
+source = ["JMESPathLibrary"]
 
 [tool.coverage.report]
 exclude_lines = ["pragma: no cover", "@abstract", "except ImportError:"]
@@ -78,7 +78,7 @@ ignore = [
 "__init__.py" = ["F401"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["JMESPath"]
+known-first-party = ["JMESPathLibrary"]
 
 [tool.bandit]
 exclude_dirs = ["tests"]
@@ -107,7 +107,7 @@ markers = ["unit", "integration"]
 testpaths = ["tests"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["JMESPath"]
+packages = ["JMESPathLibrary"]
 
 [build-system]
 requires = ["hatchling"]

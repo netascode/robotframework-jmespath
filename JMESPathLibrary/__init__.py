@@ -8,9 +8,10 @@ offering a modern alternative to JSONPath for Robot Framework tests.
 from .keywords import JMESPathKeywords
 
 __version__ = "0.1.0"
+__all__ = ["JMESPathLibrary"]
 
 
-class JMESPath(JMESPathKeywords):
+class JMESPathLibrary(JMESPathKeywords):
     """<p>JMESPath is a Robot Framework library that provides high-performance JSON querying
         using <a href="https://jmespath.org/">JMESPath</a> expressions.</p>
 
@@ -37,7 +38,7 @@ class JMESPath(JMESPathKeywords):
 
         <pre>
     *** Settings ***
-    Library    JMESPath
+    Library    JMESPathLibrary
 
     *** Test Cases ***
     Query JSON Data
@@ -115,7 +116,7 @@ class JMESPath(JMESPathKeywords):
         <pre>
     *** Settings ***
     Library    RequestsLibrary
-    Library    JMESPath
+    Library    JMESPathLibrary
 
     *** Test Cases ***
     Verify API Response
@@ -137,7 +138,7 @@ class JMESPath(JMESPathKeywords):
         <pre>
     *** Settings ***
     Library    RequestsLibrary
-    Library    JMESPath
+    Library    JMESPathLibrary
 
     Suite Setup    Create Session    apic    https://apic.example.com
 

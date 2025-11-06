@@ -7,9 +7,8 @@ using JMESPath expressions.
 
 from typing import Any
 
-from robot.api.deco import keyword
-
 import jmespath
+from robot.api.deco import keyword
 
 
 class JMESPathKeywords:
