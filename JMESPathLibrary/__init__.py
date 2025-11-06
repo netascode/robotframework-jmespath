@@ -42,7 +42,7 @@ class JMESPathLibrary(JMESPathKeywords):
 
     *** Test Cases ***
     Query JSON Data
-        ${json}=    Set Variable    {"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]}
+        ${json}=    Set Variable    ${{ {"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]} }}
         ${name}=    JSON Search String    ${json}    users&#91;0&#93;.name
         Should Be Equal    ${name}    Alice
 

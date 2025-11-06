@@ -30,7 +30,7 @@ Library    JMESPathLibrary
 
 *** Test Cases ***
 Query JSON Data
-    ${json}=    Set Variable    {"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]}
+    ${json}=    Evaluate    {"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]}
     ${name}=    JSON Search String    ${json}    users[0].name
     Should Be Equal    ${name}    Alice
 

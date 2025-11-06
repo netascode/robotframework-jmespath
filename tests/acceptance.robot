@@ -1,7 +1,12 @@
 *** Settings ***
 Documentation    Acceptance tests for JMESPathLibrary
 Library          JMESPathLibrary
-Suite Setup      Setup Test Data
+
+*** Variables ***
+${SIMPLE_JSON}       ${{ {"name": "Alice", "age": 30} }}
+${USERS_JSON}        ${{ {"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}, {"name": "Charlie", "age": 35}]} }}
+${NESTED_JSON}       ${{ {"data": {"user": {"profile": {"name": "Alice", "email": "alice@example.com"}}}} }}
+${ARRAY_JSON}        ${{ {"items": [{"id": 1, "name": "Item1"}, {"id": 2, "name": "Item2"}, {"id": 3, "name": "Item3"}]} }}
 
 *** Test Cases ***
 JSON Search Returns Raw Dict
@@ -102,7 +107,7 @@ JSON Search List Returns Empty For No Match
 
 JSON Search List Complex Query
     [Documentation]    Test complex nested query
-    ${complex}=    Evaluate    {"data": {"items": [{"id": 1, "active": True}, {"id": 2, "active": False}, {"id": 3, "active": True}]}}
+    ${complex}=    Set Variable    ${{ {"data": {"items": [{"id": 1, "active": True}, {"id": 2, "active": False}, {"id": 3, "active": True}]}} }}
     ${result}=    JSON Search List    ${complex}    data.items[?active].id
     Should Contain    ${result}    ${1}
     Should Contain    ${result}    ${3}
@@ -112,15 +117,3 @@ JSON Search List Complex Query
 Invalid Expression Should Fail
     [Documentation]    Test that invalid JMESPath expression raises error
     Run Keyword And Expect Error    *Invalid jmespath expression*    JSON Search    ${SIMPLE_JSON}    invalid[
-
-*** Keywords ***
-Setup Test Data
-    [Documentation]    Setup test data as Python dicts
-    ${simple}=    Evaluate    {"name": "Alice", "age": 30}
-    ${users}=     Evaluate    {"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}, {"name": "Charlie", "age": 35}]}
-    ${nested}=    Evaluate    {"data": {"user": {"profile": {"name": "Alice", "email": "alice@example.com"}}}}
-    ${array}=     Evaluate    {"items": [{"id": 1, "name": "Item1"}, {"id": 2, "name": "Item2"}, {"id": 3, "name": "Item3"}]}
-    Set Suite Variable    ${SIMPLE_JSON}    ${simple}
-    Set Suite Variable    ${USERS_JSON}     ${users}
-    Set Suite Variable    ${NESTED_JSON}    ${nested}
-    Set Suite Variable    ${ARRAY_JSON}     ${array}
