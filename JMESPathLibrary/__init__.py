@@ -10,7 +10,7 @@ offering a modern alternative to JSONPath for Robot Framework tests.
 
 from .keywords import JMESPathKeywords
 
-__version__ = "0.1.0"
+__version__ = "0.1"
 __all__ = ["JMESPathLibrary"]
 
 

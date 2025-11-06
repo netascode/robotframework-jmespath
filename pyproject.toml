@@ -1,6 +1,6 @@
 [project]
 name = "robotframework-jmespath"
-version = "0.1.0"
+version = "0.1"
 description = "A Robot Framework library for JMESPath-based JSON querying, providing high-performance alternative to JSONPath"
 license = { text = "MPL-2.0" }
 readme = "README.md"
