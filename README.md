@@ -1,0 +1,222 @@
+# Robot Framework JMESPath Library
+
+A Robot Framework library providing high-performance JSON querying using [JMESPath](https://jmespath.org/) expressions.
+
+[![PyPI version](https://badge.fury.io/py/robotframework-jmespath.svg)](https://badge.fury.io/py/robotframework-jmespath)
+[![Python versions](https://img.shields.io/pypi/pyversions/robotframework-jmespath.svg)](https://pypi.org/project/robotframework-jmespath/)
+[![License](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+
+## Why JMESPath?
+
+JMESPath offers significant advantages over JSONPath for Robot Framework testing:
+
+- **Better Performance**: Native Python implementation with superior performance
+- **More Powerful**: Rich filtering, projections, and transformations
+- **Better Maintained**: Active development and strong community support
+- **Simpler Syntax**: Cleaner, more intuitive query expressions
+- **Standardized**: Well-defined specification and behavior
+
+## Installation
+
+```bash
+pip install robotframework-jmespath
+```
+
+## Quick Start
+
+```robot
+*** Settings ***
+Library    JMESPath
+
+*** Test Cases ***
+Query JSON Data
+    ${json}=    Set Variable    {"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]}
+    ${name}=    Json Search String    ${json}    users[0].name
+    Should Be Equal    ${name}    Alice
+
+    ${names}=    Json Search List    ${json}    users[*].name
+    Should Contain    ${names}    Alice
+    Should Contain    ${names}    Bob
+```
+
+## Keywords
+
+### Json Search String
+
+Execute a JMESPath query and return a single string result.
+
+**Arguments:**
+- `data`: JSON data to query (dict, list, or JSON string)
+- `expression`: JMESPath expression
+
+**Returns:** String value (first result if multiple matches), or empty string if no match
+
+**Examples:**
+```robot
+${tenant}=    Json Search String    ${response}    imdata[0].fvTenant.attributes.name
+${ip}=        Json Search String    ${response}    imdata[0].fvBD.children[?fvSubnet] | [0].fvSubnet.attributes.ip
+```
+
+### Json Search List
+
+Execute a JMESPath query and return results as a list.
+
+**Arguments:**
+- `data`: JSON data to query (dict, list, or JSON string)
+- `expression`: JMESPath expression
+
+**Returns:** List of results, or empty list if no matches
+
+**Examples:**
+```robot
+${names}=    Json Search List    ${response}    imdata[0].fvTenant.children[*].fvAp.attributes.name
+${ips}=      Json Search List    ${response}    imdata[0].fvBD.children[*].fvSubnet.attributes.ip
+```
+
+## JMESPath Syntax Overview
+
+### Basic Operations
+
+| Operation | Example | Description |
+|-----------|---------|-------------|
+| **Object access** | `foo.bar` | Access nested object |
+| **Array access** | `foo[0]` | Access array element |
+| **Array slice** | `foo[0:2]` | Slice array |
+| **Wildcard** | `foo[*].bar` | All array elements |
+| **Filter** | `foo[?bar=='value']` | Filter array |
+| **Pipe** | `foo \| [0]` | Chain expressions |
+
+### Common Patterns
+
+**Access nested object:**
+```
+imdata[0].fvTenant.attributes.name
+```
+
+**Filter array by attribute:**
+```
+imdata[0].fvTenant.children[?fvAp.attributes.name=='AP1'] | [0]
+```
+
+**Get all names from array:**
+```
+imdata[0].fvTenant.children[*].fvAp.attributes.name
+```
+
+**Filter with multiple conditions:**
+```
+users[?age > `25` && active == `true`]
+```
+
+## Comparison with JSONPath
+
+| Feature | JSONPath | JMESPath |
+|---------|----------|----------|
+| Root | `$` | (implicit) |
+| Child access | `$.foo.bar` | `foo.bar` |
+| Recursive descent | `$..field` | Not supported* |
+| Array filter | `$[?(@.age > 25)]` | `[?age > \`25\`]` |
+| Wildcard | `$.*` | `*` or `[*]` |
+| Pipe/Chain | Not supported | `foo \| [0]` |
+
+*For recursive descent, use explicit paths: `children[?fvAp]`
+
+## Usage with REST API Testing
+
+### Example: Cisco ACI API Testing
+
+```robot
+*** Settings ***
+Library    RequestsLibrary
+Library    JMESPath
+
+*** Test Cases ***
+Verify Tenant Configuration
+    # Make API call
+    ${response}=    GET On Session    apic    /api/mo/uni/tn-TENANT1.json    params=rsp-subtree=full
+    ${json}=        Set Variable    ${response.json()}
+
+    # Query with JMESPath
+    ${tenant_name}=    Json Search String    ${json}    imdata[0].fvTenant.attributes.name
+    Should Be Equal    ${tenant_name}    TENANT1
+
+    # Query nested objects
+    ${ap_name}=    Json Search String    ${json}
+    ...    imdata[0].fvTenant.children[?fvAp.attributes.name=='AP1'] | [0].fvAp.attributes.name
+    Should Be Equal    ${ap_name}    AP1
+
+    # Get all subnet IPs
+    ${subnets}=    Json Search List    ${json}
+    ...    imdata[0].fvTenant.children[*].fvBD.children[*].fvSubnet.attributes.ip
+    Should Contain    ${subnets}    10.0.0.1/24
+```
+
+## Development
+
+### Setup Development Environment
+
+```bash
+# Clone repository
+git clone https://github.com/netascode/robotframework-jmespath.git
+cd robotframework-jmespath
+
+# Install in development mode
+pip install -e ".[dev]"
+
+# Install pre-commit hooks
+pre-commit install
+```
+
+### Running Tests
+
+```bash
+# Run unit tests
+pytest tests/
+
+# Run with coverage
+pytest --cov=JMESPath tests/
+
+# Run linters
+ruff check .
+mypy .
+bandit -r JMESPath/
+```
+
+### Code Quality
+
+This project uses:
+- **ruff** for linting and formatting
+- **mypy** for type checking
+- **bandit** for security analysis
+- **pytest** for testing
+- **pre-commit** for git hooks
+
+## Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes with tests
+4. Run the test suite
+5. Submit a pull request
+
+## Resources
+
+- [JMESPath Tutorial](https://jmespath.org/tutorial.html)
+- [JMESPath Specification](https://jmespath.org/specification.html)
+- [Robot Framework Documentation](https://robotframework.org/)
+
+## License
+
+This project is licensed under the Mozilla Public License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## Authors
+
+- Oliver Boehmer ([@oboehmer](https://github.com/oboehmer))
+
+## Acknowledgments
+
+- Inspired by the need for high-performance JSON querying in network automation testing
+- Built on the excellent [jmespath.py](https://github.com/jmespath/jmespath.py) library
+- Part of the [Network-as-Code](https://github.com/netascode) ecosystem
